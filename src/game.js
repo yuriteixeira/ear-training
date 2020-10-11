@@ -79,15 +79,14 @@ function randomNumber(max) {
 
 export async function playIntervalQuestion(intervalQuestion, timePerNote = 500) {
   const { tonic, interval } = intervalQuestion;
-  await playNote(tonic.note);
-  await playNote(interval.note);
+  await playNote(tonic.note, timePerNote);
+  await playNote(interval.note, timePerNote);
 }
 
 export function playNote(note, time = 500) {
   if (!audio.context || !audio.oscilator) throw new Error('Audio engine not initialised.');
 
   const noteFrequency = noteInHertz(note);
-
   audio.oscilator.frequency.setTargetAtTime(noteFrequency, audio.context.currentTime, 0);
 
   return new Promise(resolve => {
