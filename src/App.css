@@ -4,15 +4,21 @@
 
 .app {
   text-align: center;
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
+  font-size: 2rem;
+  color: black;
+  width: 100%;
 }
 
-.app-header {
+.app section, .app header {
+  margin-bottom: 2rem;
+}
+
+.app button {
   font-size: 2rem;
+  margin-left: 0.5rem;
 }

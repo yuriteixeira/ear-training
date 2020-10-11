@@ -1,34 +1,42 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/accessible-emoji */
+import React, { useState } from 'react';
 import './App.css';
-import { NOTES, playNote, intervalNote } from './game.js'
+import { NOTES, playNote, intervalNote, startGame } from './game.js'
 
 function App() {
+  const [hasGameStarted, setGameStarted] = useState(false);
 
   return (
     <div className="app">
-      <header className="app-header">
-        What is the interval?
-      </header>
+      {!hasGameStarted &&
+        <section className="start">
+          <header>Ear Trainer 🎼</header>
+          <button onClick={() => start(setGameStarted)}>Press to START!</button>
+        </section>
+      }
 
-      <section>
-        <button onClick={startGame}>Press to START!</button>
-      </section>
-
-      <section>
-        <button>1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>6</button>
-        <button>7</button>
-      </section>
+      {hasGameStarted &&
+        <section className="choice">
+          <header>What is the interval?</header>
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button>7</button>
+        </section>
+      }
     </div>
   );
 }
 
-async function startGame() {
+async function start(setGameStarted) {
+  startGame();
+  setGameStarted(true);
+
   const note = NOTES.C;
+
   await playNote(note);
   await playNote(intervalNote(1, note));
   await playNote(intervalNote(2, note));
