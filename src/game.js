@@ -53,27 +53,34 @@ export function startGame() {
 
 export function createIntervalQuestion() {
   const createTonic = () => {
-    const note = randomNumber(Object.keys(NOTES).length - 1);
     const direction = !!parseInt(Math.random) ? 1 : -1;
     const octave = randomNumber(2) * direction;
+    const noteNumber = randomNumber(Object.keys(NOTES).length - 1);
+    const note = transposedNote(noteNumber, octave);
     return { note, octave };
   };
 
-  const createInterval = (tonicNote) => {
-    const number = randomNumber(7);
-    const note = intervalNote(number, tonicNote);
+  const createInterval = (tonic) => {
     const direction = !!parseInt(Math.random) ? 1 : -1;
     const octave = randomNumber(2) * direction;
-    return { number, note, octave }
+    const number = randomNumber(7);
+    const note = transposedNote(intervalNote(number, tonic.note), octave);
+    return { number, note, octave };
   };
 
   const tonic = createTonic();
-  const interval = createInterval(tonic.note);
+  const interval = createInterval(tonic);
   return { tonic, interval };
 }
 
 function randomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+export async function playIntervalQuestion(intervalQuestion, timePerNote = 500) {
+  const { tonic, interval } = intervalQuestion;
+  await playNote(tonic.note);
+  await playNote(interval.note);
 }
 
 export function playNote(note, time = 500) {

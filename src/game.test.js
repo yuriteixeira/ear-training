@@ -38,5 +38,5 @@ it('generates an interval question', () => {
   expect(result.interval).toHaveProperty('number');
   expect(result.interval).toHaveProperty('note');
   expect(result.interval).toHaveProperty('octave');
-  expect(result.interval.note).toBe(intervalNote(result.interval.number, result.tonic.note));
+  expect(result.interval.note).toBe(transposedNote(intervalNote(result.interval.number, result.tonic.note), result.interval.octave));
 });
