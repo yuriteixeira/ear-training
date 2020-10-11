@@ -1,4 +1,4 @@
-import { NOTES, transposedNote, intervalNote, noteInHertz } from './game.js';
+import { NOTES, transposedNote, intervalNote, noteInHertz, createIntervalQuestion } from './game.js';
 
 it('gets the transposed note index, given a central note and an octave', () => {
   expect(transposedNote(NOTES.A, 0)).toBe(0);
@@ -26,4 +26,17 @@ it('gets frequencies for notes', () => {
   expect(noteInHertz(NOTES.C)).toBe(523.25);
   expect(noteInHertz(transposedNote(NOTES.A, 1))).toBe(880);
   expect(noteInHertz(transposedNote(NOTES.A, -1))).toBe(220);
+});
+
+it('generates an interval question', () => {
+  const result = createIntervalQuestion();
+  expect(result).toEqual(expect.any(Object));
+  expect(result).toHaveProperty('tonic');
+  expect(result).toHaveProperty('interval');
+  expect(result.tonic).toHaveProperty('note');
+  expect(result.tonic).toHaveProperty('octave');
+  expect(result.interval).toHaveProperty('number');
+  expect(result.interval).toHaveProperty('note');
+  expect(result.interval).toHaveProperty('octave');
+  expect(result.interval.note).toBe(intervalNote(result.interval.number, result.tonic.note));
 });

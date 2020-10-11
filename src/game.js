@@ -51,6 +51,31 @@ export function startGame() {
   }
 }
 
+export function createIntervalQuestion() {
+  const createTonic = () => {
+    const note = randomNumber(Object.keys(NOTES).length - 1);
+    const direction = !!parseInt(Math.random) ? 1 : -1;
+    const octave = randomNumber(2) * direction;
+    return { note, octave };
+  };
+
+  const createInterval = (tonicNote) => {
+    const number = randomNumber(7);
+    const note = intervalNote(number, tonicNote);
+    const direction = !!parseInt(Math.random) ? 1 : -1;
+    const octave = randomNumber(2) * direction;
+    return { number, note, octave }
+  };
+
+  const tonic = createTonic();
+  const interval = createInterval(tonic.note);
+  return { tonic, interval };
+}
+
+function randomNumber(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
 export function playNote(note, time = 500) {
   if (!audio.context || !audio.oscilator) throw new Error('Audio engine not initialised.');
 
