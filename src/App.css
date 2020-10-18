@@ -17,8 +17,24 @@
 .app section, .app header {
   margin-bottom: 2rem;
 }
+.app .question .choice {
+  margin: 0 2rem;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
 
 .app button {
   font-size: 2rem;
-  margin-left: 0.5rem;
+}
+
+.app .question .other-actions {
+  margin: 2rem;
+}
+
+.app .question .other-actions button {
+  font-size: 2rem;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
 }

@@ -1,4 +1,4 @@
-import { NOTES, transposedNote, intervalNote, noteInHertz, createIntervalQuestion } from './game.js';
+import { NOTES, transposedNote, intervalNote, noteInHertz, createIntervalQuestion } from './engine.js';
 
 it('gets the transposed note index, given a central note and an octave', () => {
   expect(transposedNote(NOTES.A, 0)).toBe(0);
