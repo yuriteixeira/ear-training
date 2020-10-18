@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/ear-training/static/css/main.875aceed.chunk.css",
+    "main.js": "/ear-training/static/js/main.760cd77c.chunk.js",
+    "main.js.map": "/ear-training/static/js/main.760cd77c.chunk.js.map",
+    "runtime-main.js": "/ear-training/static/js/runtime-main.45f6ee0e.js",
+    "runtime-main.js.map": "/ear-training/static/js/runtime-main.45f6ee0e.js.map",
+    "static/js/2.051c6024.chunk.js": "/ear-training/static/js/2.051c6024.chunk.js",
+    "static/js/2.051c6024.chunk.js.map": "/ear-training/static/js/2.051c6024.chunk.js.map",
+    "index.html": "/ear-training/index.html",
+    "precache-manifest.15738abfe5aadea13d1e14aee0509d39.js": "/ear-training/precache-manifest.15738abfe5aadea13d1e14aee0509d39.js",
+    "service-worker.js": "/ear-training/service-worker.js",
+    "static/css/main.875aceed.chunk.css.map": "/ear-training/static/css/main.875aceed.chunk.css.map",
+    "static/js/2.051c6024.chunk.js.LICENSE.txt": "/ear-training/static/js/2.051c6024.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.45f6ee0e.js",
+    "static/js/2.051c6024.chunk.js",
+    "static/css/main.875aceed.chunk.css",
+    "static/js/main.760cd77c.chunk.js"
+  ]
+}
