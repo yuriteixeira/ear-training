@@ -1,43 +1,47 @@
-import React, {useState} from 'react';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 import {
   addQuestion,
   collectStats,
   getGameProps,
   initEngine,
-} from './engine.js'
-import {StartHeader} from "./StartHeader";
-import {QuestionsForm} from "./QuestionsForm";
-import {ChoiceFeedback} from "./ChoiceFeedback";
-import {EndFeedbackWithStats} from "./EndFeedbackWithStats";
+} from "./engine.js";
+import { StartHeader } from "./StartHeader";
+import { QuestionsForm } from "./QuestionsForm";
+import { ChoiceFeedback } from "./ChoiceFeedback";
+import { EndFeedbackWithStats } from "./EndFeedbackWithStats";
+
+let nextQuestionTimeout;
 
 function App() {
   const [game, setGameState] = useState({});
   const [stats, setStatsState] = useState({});
   const gameProps = getGameProps(game);
 
-  console.debug({gameState: game, gameProps, stats});
+  console.debug(game.questions && game.questions.length > 0 && game.questions[0]);
 
-  const {hasGameStarted, hasGameEnded, question, hasMadeChoice, isChoiceCorrect} = gameProps;
+  const {
+    hasGameStarted,
+    hasGameEnded,
+    question,
+    hasMadeChoice,
+    isChoiceCorrect,
+  } = gameProps;
 
   function render() {
     return (
       <div className="app">
-        {!hasGameStarted &&
-          <StartHeader {...{start}} />
-        }
+        {!hasGameStarted && <StartHeader {...{ start }} />}
 
-        {hasGameStarted && !hasMadeChoice &&
-          <QuestionsForm {...{answer, question, skipQuestion, end}} />
-        }
+        {hasGameStarted && !hasMadeChoice && (
+          <QuestionsForm {...{ answer, question, nextQuestion, end }} />
+        )}
 
-        {hasGameStarted && hasMadeChoice &&
-          <ChoiceFeedback {...{isChoiceCorrect}} />
-        }
+        {hasGameStarted && hasMadeChoice && (
+          <ChoiceFeedback {...{ isChoiceCorrect, question, end }} />
+        )}
 
-        {hasGameEnded &&
-          <EndFeedbackWithStats {...{stats}} />
-        }
+        {hasGameEnded && <EndFeedbackWithStats {...{ stats }} />}
       </div>
     );
   }
@@ -47,7 +51,7 @@ function App() {
       start: Date.now(),
       questions: [],
       end: undefined,
-    }
+    };
   }
 
   async function start() {
@@ -55,33 +59,40 @@ function App() {
     const newGame = resetGame();
     await addQuestion(newGame, setGameState);
 
-    console.debug('START');
+    console.debug("START");
   }
 
-  async function skipQuestion() {
+  async function nextQuestion() {
     await addQuestion(game, setGameState);
-    console.debug('SKIP QUESTION');
+    console.debug("SKIP QUESTION");
   }
 
   function answer(element) {
     game.questions[0].choice = Number(element.target.value);
     game.questions[0].end = Date.now();
-    setGameState({...game});
+    setGameState({ ...game });
 
-    setTimeout(skipQuestion, 2000);
+    nextQuestionTimeout = setTimeout(nextQuestion, 3000);
 
-    console.debug('ANSWER');
+    console.debug("ANSWER");
   }
 
-  function end() {
+  function end(isDuringQuestion = true) {
     game.end = Date.now();
+
+    if (isDuringQuestion) {
+      game.questions.shift();
+    } else {
+      clearTimeout(nextQuestionTimeout);
+    }
+
     const stats = collectStats(game);
     setStatsState(stats);
 
     game.start = undefined;
-    setGameState({...game});
+    setGameState({ ...game });
 
-    console.debug('END');
+    console.debug("END");
   }
 
   return render();

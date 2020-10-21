@@ -13,16 +13,18 @@ export const QuestionsForm = ({answer, question, skipQuestion, end}) => (
       <button value={4} onClick={answer} disabled={!question.hasPlayed}>5</button>
       <button value={5} onClick={answer} disabled={!question.hasPlayed}>6</button>
       <button value={6} onClick={answer} disabled={!question.hasPlayed}>7</button>
-      <button value={7} onClick={answer} disabled={!question.hasPlayed}>+1</button>
+      <button value={7} onClick={answer} disabled={!question.hasPlayed}>8</button>
     </section>
 
     <section className="other-actions">
       <button onClick={() => playIntervalQuestion(question)} disabled={!question.hasPlayed}>
         Re-play
       </button>
+
       <button onClick={skipQuestion} disabled={!question.hasPlayed}>
         Next!
       </button>
+
       <button onClick={end} disabled={!question.hasPlayed}>
         Enough! Show how well I did
       </button>

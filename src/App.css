@@ -38,3 +38,25 @@
   width: 100%;
   margin-bottom: 0.5rem;
 }
+
+.app .stats {
+  text-align: left;
+  font-size: 1rem;
+}
+
+.app .stats table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.app .stats td {
+  border: 1px solid black;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.app .choice-feedback button {
+  font-size: 1.25rem;
+}
+
