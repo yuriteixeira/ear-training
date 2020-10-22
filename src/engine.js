@@ -159,7 +159,6 @@ export function collectStats(game) {
   localStorage.setItem("stats", JSON.stringify([...savedStats, gameStats]));
 
   // Decorate with historical records
-  console.debug({gameStats});
   gameStats.fasterHit.isRecord =
     gameStats.fasterHit.time < historicalStats.fasterHit?.time;
   gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
@@ -173,7 +172,6 @@ export function collectStats(game) {
 }
 
 function collectHistoricalStats(stats) {
-  console.debug({historical: stats});
   return stats.reduce((acc, stat) => {
     if (stat.avgHit.time > acc.avgHit?.time) acc.avgHit = stat.avgHit;
     if (stat.fasterHit.time > acc.fasterHit?.time)

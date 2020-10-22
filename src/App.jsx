@@ -56,13 +56,10 @@ function App() {
     initEngine();
     const newGame = resetGame();
     await addQuestion(newGame, setGameState);
-
-    console.debug("START");
   }
 
   async function nextQuestion() {
     await addQuestion(game, setGameState);
-    console.debug("SKIP QUESTION");
   }
 
   function answer(element) {
@@ -71,8 +68,6 @@ function App() {
     setGameState({ ...game });
 
     nextQuestionTimeout = setTimeout(nextQuestion, 3000);
-
-    console.debug("ANSWER");
   }
 
   function end(isDuringQuestion = true) {
