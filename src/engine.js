@@ -135,7 +135,7 @@ export function collectStats(game) {
     totalTime: game.end - game.start,
   };
 
-  console.debug({game});
+  console.debug({ game });
   if (game.questions.length < 1) return defaults;
 
   // We need to revert the array before collecting stats (we
@@ -163,37 +163,39 @@ export function collectStats(game) {
     const fasterHit = acc.fasterHit && acc.fasterHit.end - acc.fasterHit.start;
     const slowerHit = acc.fasterHit && acc.slowerHit.end - acc.slowerHit.start;
 
-    if (!fasterHit || time < fasterHit)
-      acc.fasterHit = { ...question, time };
+    if (!fasterHit || time < fasterHit) acc.fasterHit = { ...question, time };
 
-    if (!slowerHit || time > slowerHit)
-      acc.slowerHit = { ...question, time };
+    if (!slowerHit || time > slowerHit) acc.slowerHit = { ...question, time };
 
     return acc;
   }, defaults);
 
-  gameStats.avgHit = { time: gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect }
-  localStorage.setItem(
-    "stats",
-    JSON.stringify([...savedStats, gameStats])
-  );
+  gameStats.avgHit = {
+    time:
+      gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect,
+  };
+  localStorage.setItem("stats", JSON.stringify([...savedStats, gameStats]));
 
   // Decorate with historical records
-  console.debug({gameStats});
-  gameStats.fasterHit.isRecord = gameStats.fasterHit.time < historicalStats.fasterHit?.time;
+  console.debug({ gameStats });
+  gameStats.fasterHit.isRecord =
+    gameStats.fasterHit.time < historicalStats.fasterHit?.time;
   gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
-  gameStats.slowerHit.isRecord = gameStats.slowerHit.time < historicalStats.slowerHit?.time;
+  gameStats.slowerHit.isRecord =
+    gameStats.slowerHit.time < historicalStats.slowerHit?.time;
   gameStats.slowerHit.lastRecord = historicalStats.slowerHit;
-  gameStats.avgHit.isRecord = gameStats.avgHit.time < historicalStats.avgHit?.time
+  gameStats.avgHit.isRecord =
+    gameStats.avgHit.time < historicalStats.avgHit?.time;
 
   return gameStats;
 }
 
 function collectHistoricalStats(stats) {
-  console.debug({historical: stats});
+  console.debug({ historical: stats });
   return stats.reduce((acc, stat) => {
     if (stat.avgHit.time > acc.avgHit?.time) acc.avgHit = stat.avgHit;
-    if (stat.fasterHit.time > acc.fasterHit?.time) acc.fasterHit = stat.fasterHit;
+    if (stat.fasterHit.time > acc.fasterHit?.time)
+      acc.fasterHit = stat.fasterHit;
     return acc;
   }, {});
 }
