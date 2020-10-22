@@ -26,7 +26,7 @@ export const QuestionsForm = ({answer, question, nextQuestion, end}) => (
       </button>
 
       <button onClick={end} disabled={!question.hasPlayed}>
-        Enough! Show how well I did
+        I'm done... Stats!
       </button>
     </section>
   </section>

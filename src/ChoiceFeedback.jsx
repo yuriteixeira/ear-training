@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ChoiceFeedback = ({ isChoiceCorrect, question, end }) => (
+export const ChoiceFeedback = ({ isChoiceCorrect, question, nextQuestion, end }) => (
   <section className="choice-feedback">
     <p>{isChoiceCorrect ? "CORRECT! 🎉" : "Incorrect... 😨"}</p>
 
@@ -16,8 +16,14 @@ export const ChoiceFeedback = ({ isChoiceCorrect, question, end }) => (
     </p>
 
     <p>
+      <button onClick={nextQuestion}>
+        Next, pls!
+      </button>
+    </p>
+
+    <p>
       <button onClick={() => end(false)}>
-        No more questions, show me stats
+        I'm done... Stats!
       </button>
     </p>
   </section>

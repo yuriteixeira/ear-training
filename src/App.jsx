@@ -36,7 +36,7 @@ function App() {
         )}
 
         {hasGameStarted && hasMadeChoice && (
-          <ChoiceFeedback {...{ isChoiceCorrect, question, end }} />
+          <ChoiceFeedback {...{ isChoiceCorrect, question, nextQuestion, end }} />
         )}
 
         {hasGameEnded && <EndFeedbackWithStats {...{ stats }} />}
