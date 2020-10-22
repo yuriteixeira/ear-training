@@ -18,8 +18,6 @@ function App() {
   const [stats, setStatsState] = useState({});
   const gameProps = getGameProps(game);
 
-  console.debug(game.questions && game.questions.length > 0 && game.questions[0]);
-
   const {
     hasGameStarted,
     hasGameEnded,
