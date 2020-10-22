@@ -1,5 +1,5 @@
-import { formatTime } from "./engine";
-import React from "react";
+import { formatTime } from './engine';
+import React from 'react';
 
 export const EndFeedbackWithStats = ({ stats, historicalStats }) => (
   <section className="end">
@@ -31,13 +31,12 @@ export const EndFeedbackWithStats = ({ stats, historicalStats }) => (
                   <strong>Faster hit</strong>
                 </td>
                 <td>
-                  {formatTime(stats.fasterHit?.time)}{" "}
+                  {formatTime(stats.fasterHit?.time)}{' '}
                   {stats.fasterHit.isRecord ? (
                     <strong> RECORD!</strong>
                   ) : (
                     <span>
-                      (Last record: {stats.fasterHit?.lastRecord?.time || "???"}{" "}
-                      at {String(new Date(stats.fasterHit?.lastRecord?.start))})
+                      (Last record: {stats.fasterHit?.lastRecord?.time || '???'} at {String(new Date(stats.fasterHit?.lastRecord?.start))})
                     </span>
                   )}
                 </td>
@@ -47,13 +46,12 @@ export const EndFeedbackWithStats = ({ stats, historicalStats }) => (
                   <strong>Slower hit</strong>
                 </td>
                 <td>
-                  {formatTime(stats.slowerHit?.time)}{" "}
+                  {formatTime(stats.slowerHit?.time)}{' '}
                   {stats.slowerHit.isRecord ? (
                     <strong> RECORD!</strong>
                   ) : (
                     <span>
-                      (Last record: {stats.slowerHit?.lastRecord?.time || "???"}{" "}
-                      at {String(new Date(stats.slowerHit?.lastRecord?.start))})
+                      (Last record: {stats.slowerHit?.lastRecord?.time || '???'} at {String(new Date(stats.slowerHit?.lastRecord?.start))})
                     </span>
                   )}
                 </td>
@@ -63,13 +61,12 @@ export const EndFeedbackWithStats = ({ stats, historicalStats }) => (
                   <strong>Avg time to hit</strong>
                 </td>
                 <td>
-                  {formatTime(stats.avgHit?.time)}{" "}
+                  {formatTime(stats.avgHit?.time)}{' '}
                   {stats.avgHit.isRecord ? (
                     <strong> RECORD!</strong>
                   ) : (
                     <span>
-                      (Last record: {stats.avgHit?.lastRecord?.time || "???"} at{" "}
-                      {String(new Date(stats.avgHit?.lastRecord?.start))})
+                      (Last record: {stats.avgHit?.lastRecord?.time || '???'} at {String(new Date(stats.avgHit?.lastRecord?.start))})
                     </span>
                   )}
                 </td>

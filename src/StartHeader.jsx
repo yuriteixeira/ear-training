@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const StartHeader = ({start}) => (
+export const StartHeader = ({ start }) => (
   <section className="start">
     {/* eslint-disable-next-line */}
     <header>Ear Trainer 🎼</header>

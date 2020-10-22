@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import "./App.css";
-import {
-  addQuestion,
-  collectStats,
-  getGameProps,
-  initEngine,
-} from "./engine.js";
-import { StartHeader } from "./StartHeader";
-import { QuestionsForm } from "./QuestionsForm";
-import { ChoiceFeedback } from "./ChoiceFeedback";
-import { EndFeedbackWithStats } from "./EndFeedbackWithStats";
+import React, { useState } from 'react';
+import './App.css';
+import { addQuestion, collectStats, getGameProps, initEngine } from './engine.js';
+import { StartHeader } from './StartHeader';
+import { QuestionsForm } from './QuestionsForm';
+import { ChoiceFeedback } from './ChoiceFeedback';
+import { EndFeedbackWithStats } from './EndFeedbackWithStats';
 
 let nextQuestionTimeout;
 
@@ -18,26 +13,16 @@ function App() {
   const [stats, setStatsState] = useState({});
   const gameProps = getGameProps(game);
 
-  const {
-    hasGameStarted,
-    hasGameEnded,
-    question,
-    hasMadeChoice,
-    isChoiceCorrect,
-  } = gameProps;
+  const { hasGameStarted, hasGameEnded, question, hasMadeChoice, isChoiceCorrect } = gameProps;
 
   function render() {
     return (
       <div className="app">
         {!hasGameStarted && <StartHeader {...{ start }} />}
 
-        {hasGameStarted && !hasMadeChoice && (
-          <QuestionsForm {...{ answer, question, nextQuestion, end }} />
-        )}
+        {hasGameStarted && !hasMadeChoice && <QuestionsForm {...{ answer, question, nextQuestion, end }} />}
 
-        {hasGameStarted && hasMadeChoice && (
-          <ChoiceFeedback {...{ isChoiceCorrect, question, nextQuestion, end }} />
-        )}
+        {hasGameStarted && hasMadeChoice && <ChoiceFeedback {...{ isChoiceCorrect, question, nextQuestion, end }} />}
 
         {hasGameEnded && <EndFeedbackWithStats {...{ stats }} />}
       </div>

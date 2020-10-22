@@ -1,5 +1,5 @@
-import { formatTime } from "./engine";
-import React from "react";
+import { formatTime } from './engine';
+import React from 'react';
 
 export const HistoricalStats = ({ stats }) => (
   <section className="history">

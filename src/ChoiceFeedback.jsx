@@ -1,13 +1,12 @@
-import React from "react";
+import React from 'react';
 
 export const ChoiceFeedback = ({ isChoiceCorrect, question, nextQuestion, end }) => (
   <section className="choice-feedback">
-    <p>{isChoiceCorrect ? "CORRECT! 🎉" : "Incorrect... 😨"}</p>
+    <p>{isChoiceCorrect ? 'CORRECT! 🎉' : 'Incorrect... 😨'}</p>
 
     {!isChoiceCorrect && (
       <p>
-        You chose {question.choice + 1} but the write interval is{" "}
-        <strong>{question.interval.number + 1}</strong>
+        You chose {question.choice + 1} but the write interval is <strong>{question.interval.number + 1}</strong>
       </p>
     )}
 
@@ -16,15 +15,11 @@ export const ChoiceFeedback = ({ isChoiceCorrect, question, nextQuestion, end })
     </p>
 
     <p>
-      <button onClick={nextQuestion}>
-        Next, pls!
-      </button>
+      <button onClick={nextQuestion}>Next, pls!</button>
     </p>
 
     <p>
-      <button onClick={() => end(false)}>
-        I'm done... Stats!
-      </button>
+      <button onClick={() => end(false)}>I'm done... Stats!</button>
     </p>
   </section>
 );

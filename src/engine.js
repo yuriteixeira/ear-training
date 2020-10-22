@@ -4,7 +4,7 @@
  * - https://calculla.com/calculators/table/note_frequencies
  */
 
-import {Synth} from "./synth";
+import { Synth } from './synth';
 
 let audio;
 
@@ -39,10 +39,7 @@ export function intervalNote(interval, note, scale = SCALES.MAJOR) {
   if (target < 0) return note;
 
   // find the note given an interval, based in how many steps/jumps are necessary
-  const intervalSum = scale.reduce(
-    (sum, jumps, idx) => (idx > target ? sum : sum + jumps),
-    0
-  );
+  const intervalSum = scale.reduce((sum, jumps, idx) => (idx > target ? sum : sum + jumps), 0);
   return note + intervalSum;
 }
 
@@ -60,10 +57,10 @@ export function createIntervalQuestion() {
     const octave = randomNumber(1) * direction;
     const noteNumber = randomNumber(11); // 12 possible notes
     const note = transposedNote(noteNumber, octave);
-    return {note, octave};
+    return { note, octave };
   };
 
-  const createInterval = (tonic) => {
+  const createInterval = tonic => {
     const direction = !!randomNumber(1) ? 1 : -1;
     const octave = randomNumber(1) * direction;
     let number = randomNumber(7); // 8 possible intervals to go from one octave to another
@@ -74,23 +71,20 @@ export function createIntervalQuestion() {
       number = 0;
     }
 
-    return {number, note, octave};
+    return { number, note, octave };
   };
 
   const tonic = createTonic();
   const interval = createInterval(tonic);
-  return {tonic, interval};
+  return { tonic, interval };
 }
 
 function randomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max + 1));
 }
 
-export async function playIntervalQuestion(
-  intervalQuestion,
-  timePerNote = 750
-) {
-  const {tonic, interval} = intervalQuestion;
+export async function playIntervalQuestion(intervalQuestion, timePerNote = 750) {
+  const { tonic, interval } = intervalQuestion;
   await playNote(tonic.note, timePerNote);
   await playNote(interval.note, timePerNote);
 }
@@ -98,7 +92,7 @@ export async function playIntervalQuestion(
 async function playNote(note, time) {
   audio.play(noteInHertz(note));
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       audio.stop();
       resolve();
@@ -125,7 +119,7 @@ export function collectStats(game) {
   // inserted question through index 0)
   const questions = game.questions.reverse();
 
-  const savedStats = JSON.parse(localStorage.getItem("stats")) || [];
+  const savedStats = JSON.parse(localStorage.getItem('stats')) || [];
 
   const historicalStats = collectHistoricalStats(savedStats);
 
@@ -145,28 +139,24 @@ export function collectStats(game) {
     const fasterHit = acc.fasterHit && acc.fasterHit.end - acc.fasterHit.start;
     const slowerHit = acc.fasterHit && acc.slowerHit.end - acc.slowerHit.start;
 
-    if (!fasterHit || time < fasterHit) acc.fasterHit = {...question, time};
+    if (!fasterHit || time < fasterHit) acc.fasterHit = { ...question, time };
 
-    if (!slowerHit || time > slowerHit) acc.slowerHit = {...question, time};
+    if (!slowerHit || time > slowerHit) acc.slowerHit = { ...question, time };
 
     return acc;
   }, defaults);
 
   gameStats.avgHit = {
-    time:
-      gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect,
+    time: gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect,
   };
-  localStorage.setItem("stats", JSON.stringify([...savedStats, gameStats]));
+  localStorage.setItem('stats', JSON.stringify([...savedStats, gameStats]));
 
   // Decorate with historical records
-  gameStats.fasterHit.isRecord =
-    gameStats.fasterHit.time < historicalStats.fasterHit?.time;
+  gameStats.fasterHit.isRecord = gameStats.fasterHit.time < historicalStats.fasterHit?.time;
   gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
-  gameStats.slowerHit.isRecord =
-    gameStats.slowerHit.time < historicalStats.slowerHit?.time;
+  gameStats.slowerHit.isRecord = gameStats.slowerHit.time < historicalStats.slowerHit?.time;
   gameStats.slowerHit.lastRecord = historicalStats.slowerHit;
-  gameStats.avgHit.isRecord =
-    gameStats.avgHit.time < historicalStats.avgHit?.time;
+  gameStats.avgHit.isRecord = gameStats.avgHit.time < historicalStats.avgHit?.time;
 
   return gameStats;
 }
@@ -174,14 +164,13 @@ export function collectStats(game) {
 function collectHistoricalStats(stats) {
   return stats.reduce((acc, stat) => {
     if (stat.avgHit.time > acc.avgHit?.time) acc.avgHit = stat.avgHit;
-    if (stat.fasterHit.time > acc.fasterHit?.time)
-      acc.fasterHit = stat.fasterHit;
+    if (stat.fasterHit.time > acc.fasterHit?.time) acc.fasterHit = stat.fasterHit;
     return acc;
   }, {});
 }
 
 export function formatTime(ms) {
-  if (!ms) return "???";
+  if (!ms) return '???';
   const seconds = (ms / 1000).toFixed(2);
   return `${seconds}s`;
 }
@@ -208,11 +197,11 @@ export function getGameProps(game) {
 export async function addQuestion(game, setGameState) {
   const newQuestion = createIntervalQuestion();
   game.questions.unshift(newQuestion);
-  setGameState({...game});
+  setGameState({ ...game });
 
   await playIntervalQuestion(game.questions[0]);
 
   game.questions[0].hasPlayed = true;
   game.questions[0].start = Date.now();
-  setGameState({...game});
+  setGameState({ ...game });
 }

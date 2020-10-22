@@ -14,7 +14,8 @@
   width: 100%;
 }
 
-.app section, .app header {
+.app section,
+.app header {
   margin-bottom: 2rem;
 }
 .app .question .choice {
@@ -60,4 +61,3 @@
 .app .choice-feedback button {
   font-size: 1.25rem;
 }
-

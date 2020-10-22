@@ -1,13 +1,6 @@
-import {
-  NOTES,
-  transposedNote,
-  intervalNote,
-  noteInHertz,
-  createIntervalQuestion,
-  collectStats,
-} from "./engine.js";
+import { NOTES, transposedNote, intervalNote, noteInHertz, createIntervalQuestion, collectStats } from './engine.js';
 
-it("gets the transposed note index, given a central note and an octave", () => {
+it('gets the transposed note index, given a central note and an octave', () => {
   expect(transposedNote(NOTES.A, 0)).toBe(0);
   expect(transposedNote(NOTES.A, 1)).toBe(12);
   expect(transposedNote(NOTES.A, 2)).toBe(24);
@@ -16,7 +9,7 @@ it("gets the transposed note index, given a central note and an octave", () => {
   expect(transposedNote(NOTES.C, 1)).toBe(15);
 });
 
-it("get the interval index, given an initial note index", () => {
+it('get the interval index, given an initial note index', () => {
   expect(intervalNote(0, NOTES.C)).toBe(NOTES.C);
   expect(intervalNote(1, NOTES.C)).toBe(NOTES.D);
   expect(intervalNote(2, NOTES.C)).toBe(NOTES.E);
@@ -27,7 +20,7 @@ it("get the interval index, given an initial note index", () => {
   expect(intervalNote(7, NOTES.C)).toBe(transposedNote(NOTES.C, 1));
 });
 
-it("gets frequencies for notes", () => {
+it('gets frequencies for notes', () => {
   expect(noteInHertz(NOTES.A)).toBe(440);
   expect(noteInHertz(NOTES.B)).toBe(493.88);
   expect(noteInHertz(NOTES.C)).toBe(523.25);
@@ -35,25 +28,20 @@ it("gets frequencies for notes", () => {
   expect(noteInHertz(transposedNote(NOTES.A, -1))).toBe(220);
 });
 
-it("generates an interval question", () => {
+it('generates an interval question', () => {
   const result = createIntervalQuestion();
   expect(result).toEqual(expect.any(Object));
-  expect(result).toHaveProperty("tonic");
-  expect(result).toHaveProperty("interval");
-  expect(result.tonic).toHaveProperty("note");
-  expect(result.tonic).toHaveProperty("octave");
-  expect(result.interval).toHaveProperty("number");
-  expect(result.interval).toHaveProperty("note");
-  expect(result.interval).toHaveProperty("octave");
-  expect(result.interval.note).toBe(
-    transposedNote(
-      intervalNote(result.interval.number, result.tonic.note),
-      result.interval.octave
-    )
-  );
+  expect(result).toHaveProperty('tonic');
+  expect(result).toHaveProperty('interval');
+  expect(result.tonic).toHaveProperty('note');
+  expect(result.tonic).toHaveProperty('octave');
+  expect(result.interval).toHaveProperty('number');
+  expect(result.interval).toHaveProperty('note');
+  expect(result.interval).toHaveProperty('octave');
+  expect(result.interval.note).toBe(transposedNote(intervalNote(result.interval.number, result.tonic.note), result.interval.octave));
 });
 
-it("aggregates stats", () => {
+it('aggregates stats', () => {
   const time = Date.now();
 
   const rightQuestion = {
@@ -90,7 +78,7 @@ it("aggregates stats", () => {
   expect(result.totalCorrect).toEqual(2);
   expect(result.totalIncorrect).toEqual(1);
   expect(result.sumTimeToHit).toEqual(5000);
-  expect(result.fasterHit).toEqual({...rightQuestion, time: 1000, isRecord: false});
-  expect(result.slowerHit).toEqual({...rightButSlowQuestion, time: 4000, isRecord: false});
+  expect(result.fasterHit).toEqual({ ...rightQuestion, time: 1000, isRecord: false });
+  expect(result.slowerHit).toEqual({ ...rightButSlowQuestion, time: 4000, isRecord: false });
   expect(result.avgHit.time).toEqual(2500);
 });
