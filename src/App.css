@@ -47,17 +47,13 @@
 }
 
 .app .stats table {
-  border: 1px solid black;
+  border: none;
   border-collapse: collapse;
   width: 100%;
 }
 
 .app .stats td {
-  border: 1px solid black;
+  border: none;
   padding: 0.5rem;
   text-align: left;
-}
-
-.app .choice-feedback button {
-  font-size: 1.25rem;
 }
