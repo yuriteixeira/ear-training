@@ -21,11 +21,12 @@
   margin: 0 2rem;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .app button {
   font-size: 2rem;
+  flex-grow: 1;
 }
 
 .app .question .other-actions {
