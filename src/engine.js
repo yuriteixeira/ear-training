@@ -102,12 +102,16 @@ async function playNote(note, time) {
 
 // TODO: Tests on all new functions below
 
+
 export function collectStats(game) {
   const defaults = {
     totalQuestions: 0,
     totalIncorrect: 0,
     totalCorrect: 0,
     sumTimeToHit: 0,
+    slowerHit: {},
+    fasterHit: {},
+    avgHit: {},
     date: game.start,
     totalTime: game.end - game.start,
   };
@@ -121,7 +125,7 @@ export function collectStats(game) {
 
   const savedStats = JSON.parse(localStorage.getItem('stats')) || [];
 
-  const historicalStats = collectHistoricalStats(savedStats);
+  const recordStats = aggregateRecords(savedStats);
 
   const gameStats = questions.reduce((acc, question) => {
     acc.totalQuestions++;
@@ -137,10 +141,9 @@ export function collectStats(game) {
     acc.sumTimeToHit = acc.sumTimeToHit + time;
 
     const fasterHit = acc.fasterHit && acc.fasterHit.end - acc.fasterHit.start;
-    const slowerHit = acc.fasterHit && acc.slowerHit.end - acc.slowerHit.start;
+    const slowerHit = acc.slowerHit && acc.slowerHit.end - acc.slowerHit.start;
 
     if (!fasterHit || time < fasterHit) acc.fasterHit = { ...question, time };
-
     if (!slowerHit || time > slowerHit) acc.slowerHit = { ...question, time };
 
     return acc;
@@ -148,25 +151,36 @@ export function collectStats(game) {
 
   gameStats.avgHit = {
     time: gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect,
+    start: game.start
   };
+
   localStorage.setItem('stats', JSON.stringify([...savedStats, gameStats]));
 
-  // Decorate with historical records
-  gameStats.fasterHit.isRecord = gameStats.fasterHit.time < historicalStats.fasterHit?.time;
-  gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
-  gameStats.slowerHit.isRecord = gameStats.slowerHit.time < historicalStats.slowerHit?.time;
-  gameStats.slowerHit.lastRecord = historicalStats.slowerHit;
-  gameStats.avgHit.isRecord = gameStats.avgHit.time < historicalStats.avgHit?.time;
+  decorateStatsWithRecords(gameStats, recordStats);
 
+  console.log({ gameStats, historicalStats: recordStats });
   return gameStats;
 }
 
-function collectHistoricalStats(stats) {
+function aggregateRecords(stats) {
   return stats.reduce((acc, stat) => {
-    if (stat.avgHit.time > acc.avgHit?.time) acc.avgHit = stat.avgHit;
-    if (stat.fasterHit.time > acc.fasterHit?.time) acc.fasterHit = stat.fasterHit;
+    debugger;
+    if (!acc.avgHit || stat.avgHit?.time < acc.avgHit?.time) acc.avgHit = stat.avgHit;
+    if (!acc.fasterHit || stat.fasterHit?.time < acc.fasterHit?.time) acc.fasterHit = stat.fasterHit;
+    if (!acc.slowerHit || stat.slowerHit?.time > acc.slowerHit?.time) acc.slowerHit = stat.slowerHit;
     return acc;
   }, {});
+}
+
+function decorateStatsWithRecords(gameStats, historicalStats) {
+  gameStats.avgHit.isRecord = gameStats.avgHit?.time < historicalStats.avgHit?.time;
+  gameStats.avgHit.lastRecord = historicalStats.avgHit;
+
+  gameStats.fasterHit.isRecord = gameStats.fasterHit?.time < historicalStats.fasterHit?.time;
+  gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
+
+  gameStats.slowerHit.isRecord = gameStats.slowerHit?.time > historicalStats.slowerHit?.time;
+  gameStats.slowerHit.lastRecord = historicalStats.slowerHit;
 }
 
 export function formatTime(ms) {
