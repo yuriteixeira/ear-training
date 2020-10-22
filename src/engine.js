@@ -4,6 +4,8 @@
  * - https://calculla.com/calculators/table/note_frequencies
  */
 
+import {Synth} from "./synth";
+
 let audio;
 
 export const NOTES = {
@@ -49,16 +51,7 @@ export function noteInHertz(note) {
 }
 
 export function initEngine() {
-  const context = new AudioContext();
-  const oscilator = context.createOscillator();
-  oscilator.type = "triangle";
-  oscilator.connect(context.destination);
-  oscilator.start(0);
-
-  audio = {
-    context,
-    oscilator,
-  };
+  audio = new Synth();
 }
 
 export function createIntervalQuestion() {
@@ -67,7 +60,7 @@ export function createIntervalQuestion() {
     const octave = randomNumber(1) * direction;
     const noteNumber = randomNumber(11); // 12 possible notes
     const note = transposedNote(noteNumber, octave);
-    return { note, octave };
+    return {note, octave};
   };
 
   const createInterval = (tonic) => {
@@ -81,12 +74,12 @@ export function createIntervalQuestion() {
       number = 0;
     }
 
-    return { number, note, octave };
+    return {number, note, octave};
   };
 
   const tonic = createTonic();
   const interval = createInterval(tonic);
-  return { tonic, interval };
+  return {tonic, interval};
 }
 
 function randomNumber(max) {
@@ -97,27 +90,17 @@ export async function playIntervalQuestion(
   intervalQuestion,
   timePerNote = 750
 ) {
-  const { tonic, interval } = intervalQuestion;
+  const {tonic, interval} = intervalQuestion;
   await playNote(tonic.note, timePerNote);
   await playNote(interval.note, timePerNote);
 }
 
-function playNote(note, time) {
-  if (!audio.context || !audio.oscilator)
-    throw new Error("Audio engine not initialised.");
-
-  const noteFrequency = noteInHertz(note);
-  audio.oscilator.frequency.setTargetAtTime(
-    noteFrequency,
-    audio.context.currentTime,
-    0
-  );
+async function playNote(note, time) {
+  audio.play(noteInHertz(note));
 
   return new Promise((resolve) => {
-    audio.context.resume();
-
     setTimeout(() => {
-      audio.context.suspend();
+      audio.stop();
       resolve();
     }, time);
   });
@@ -135,7 +118,6 @@ export function collectStats(game) {
     totalTime: game.end - game.start,
   };
 
-  console.debug({ game });
   if (game.questions.length < 1) return defaults;
 
   // We need to revert the array before collecting stats (we
@@ -163,9 +145,9 @@ export function collectStats(game) {
     const fasterHit = acc.fasterHit && acc.fasterHit.end - acc.fasterHit.start;
     const slowerHit = acc.fasterHit && acc.slowerHit.end - acc.slowerHit.start;
 
-    if (!fasterHit || time < fasterHit) acc.fasterHit = { ...question, time };
+    if (!fasterHit || time < fasterHit) acc.fasterHit = {...question, time};
 
-    if (!slowerHit || time > slowerHit) acc.slowerHit = { ...question, time };
+    if (!slowerHit || time > slowerHit) acc.slowerHit = {...question, time};
 
     return acc;
   }, defaults);
@@ -177,7 +159,7 @@ export function collectStats(game) {
   localStorage.setItem("stats", JSON.stringify([...savedStats, gameStats]));
 
   // Decorate with historical records
-  console.debug({ gameStats });
+  console.debug({gameStats});
   gameStats.fasterHit.isRecord =
     gameStats.fasterHit.time < historicalStats.fasterHit?.time;
   gameStats.fasterHit.lastRecord = historicalStats.fasterHit;
@@ -191,7 +173,7 @@ export function collectStats(game) {
 }
 
 function collectHistoricalStats(stats) {
-  console.debug({ historical: stats });
+  console.debug({historical: stats});
   return stats.reduce((acc, stat) => {
     if (stat.avgHit.time > acc.avgHit?.time) acc.avgHit = stat.avgHit;
     if (stat.fasterHit.time > acc.fasterHit?.time)
@@ -228,11 +210,11 @@ export function getGameProps(game) {
 export async function addQuestion(game, setGameState) {
   const newQuestion = createIntervalQuestion();
   game.questions.unshift(newQuestion);
-  setGameState({ ...game });
+  setGameState({...game});
 
   await playIntervalQuestion(game.questions[0]);
 
   game.questions[0].hasPlayed = true;
   game.questions[0].start = Date.now();
-  setGameState({ ...game });
+  setGameState({...game});
 }

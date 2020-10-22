@@ -1,7 +1,7 @@
 import {playIntervalQuestion} from "./engine";
 import React from "react";
 
-export const QuestionsForm = ({answer, question, skipQuestion, end}) => (
+export const QuestionsForm = ({answer, question, nextQuestion, end}) => (
   <section className="question">
     <header>What is the interval?</header>
 
@@ -21,7 +21,7 @@ export const QuestionsForm = ({answer, question, skipQuestion, end}) => (
         Re-play
       </button>
 
-      <button onClick={skipQuestion} disabled={!question.hasPlayed}>
+      <button onClick={nextQuestion} disabled={!question.hasPlayed}>
         Next!
       </button>
 
