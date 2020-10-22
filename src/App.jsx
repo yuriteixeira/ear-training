@@ -59,6 +59,7 @@ function App() {
   }
 
   async function nextQuestion() {
+    clearTimeout(nextQuestionTimeout);
     await addQuestion(game, setGameState);
   }
 
@@ -71,21 +72,18 @@ function App() {
   }
 
   function end(isDuringQuestion = true) {
-    game.end = Date.now();
+    clearTimeout(nextQuestionTimeout);
 
     if (isDuringQuestion) {
       game.questions.shift();
-    } else {
-      clearTimeout(nextQuestionTimeout);
     }
 
+    game.end = Date.now();
     const stats = collectStats(game);
     setStatsState(stats);
 
     game.start = undefined;
     setGameState({ ...game });
-
-    console.debug("END");
   }
 
   return render();
