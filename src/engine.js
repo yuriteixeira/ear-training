@@ -65,11 +65,7 @@ export function createIntervalQuestion() {
     const octave = randomNumber(2) * direction;
     let number = randomNumber(7); // 8 possible intervals to go from one octave to another
     const note = transposedNote(intervalNote(number, tonic.note), octave);
-
-    // In case the frequency is the same after transposing, the interval should be the same
-    if (note === tonic.note) {
-      number = 0;
-    }
+    number = intervalNumberAdjustments(note, tonic, octave, number);
 
     return { number, note, octave };
   };
@@ -81,6 +77,23 @@ export function createIntervalQuestion() {
 
 function randomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max + 1));
+}
+
+function intervalNumberAdjustments(note, tonic, octave, number) {
+  const isSameButInAnotherOctave = (note - tonic.note) % 12 === 0;
+
+  if (isSameButInAnotherOctave) {
+    const transDir = octave - tonic.octave;
+
+    if (transDir > 0) number = 7;
+    if (transDir < 0) number = 0;
+  }
+
+  if (note === tonic.note) {
+    number = 0;
+  }
+
+  return number;
 }
 
 export async function playIntervalQuestion(intervalQuestion, timePerNote = 750) {
@@ -158,7 +171,6 @@ export function collectStats(game) {
 
   decorateStatsWithRecords(gameStats, recordStats);
 
-  console.log({ gameStats, historicalStats: recordStats });
   return gameStats;
 }
 
