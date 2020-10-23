@@ -54,7 +54,7 @@ export function initEngine() {
 export function createIntervalQuestion() {
   const createTonic = () => {
     const direction = !!randomNumber(1) ? 1 : -1;
-    const octave = randomNumber(1) * direction;
+    const octave = randomNumber(2) * direction;
     const noteNumber = randomNumber(11); // 12 possible notes
     const note = transposedNote(noteNumber, octave);
     return { note, octave };
@@ -62,7 +62,7 @@ export function createIntervalQuestion() {
 
   const createInterval = tonic => {
     const direction = !!randomNumber(1) ? 1 : -1;
-    const octave = randomNumber(1) * direction;
+    const octave = randomNumber(2) * direction;
     let number = randomNumber(7); // 8 possible intervals to go from one octave to another
     const note = transposedNote(intervalNote(number, tonic.note), octave);
 
