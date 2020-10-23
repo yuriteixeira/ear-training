@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/ear-training/static/css/main.e54ee86f.chunk.css",
-    "main.js": "/ear-training/static/js/main.261b1e4d.chunk.js",
-    "main.js.map": "/ear-training/static/js/main.261b1e4d.chunk.js.map",
+    "main.css": "/ear-training/static/css/main.79312e9a.chunk.css",
+    "main.js": "/ear-training/static/js/main.539bd4b9.chunk.js",
+    "main.js.map": "/ear-training/static/js/main.539bd4b9.chunk.js.map",
     "runtime-main.js": "/ear-training/static/js/runtime-main.45f6ee0e.js",
     "runtime-main.js.map": "/ear-training/static/js/runtime-main.45f6ee0e.js.map",
     "static/js/2.6e60447f.chunk.js": "/ear-training/static/js/2.6e60447f.chunk.js",
     "static/js/2.6e60447f.chunk.js.map": "/ear-training/static/js/2.6e60447f.chunk.js.map",
     "index.html": "/ear-training/index.html",
-    "precache-manifest.aeeb3a44136f91f6c3c33d12a2f96cea.js": "/ear-training/precache-manifest.aeeb3a44136f91f6c3c33d12a2f96cea.js",
+    "precache-manifest.1b960d71a23efa56667edbca5ab1b383.js": "/ear-training/precache-manifest.1b960d71a23efa56667edbca5ab1b383.js",
     "service-worker.js": "/ear-training/service-worker.js",
-    "static/css/main.e54ee86f.chunk.css.map": "/ear-training/static/css/main.e54ee86f.chunk.css.map",
+    "static/css/main.79312e9a.chunk.css.map": "/ear-training/static/css/main.79312e9a.chunk.css.map",
     "static/js/2.6e60447f.chunk.js.LICENSE.txt": "/ear-training/static/js/2.6e60447f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.45f6ee0e.js",
     "static/js/2.6e60447f.chunk.js",
-    "static/css/main.e54ee86f.chunk.css",
-    "static/js/main.261b1e4d.chunk.js"
+    "static/css/main.79312e9a.chunk.css",
+    "static/js/main.539bd4b9.chunk.js"
   ]
 }
