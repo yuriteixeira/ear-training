@@ -56,18 +56,22 @@ export function createIntervalQuestion() {
     const direction = !!randomNumber(1) ? 1 : -1;
     const octave = randomNumber(2) * direction;
     const noteNumber = randomNumber(11); // 12 possible notes
-    const note = transposedNote(noteNumber, octave);
-    return { note, octave };
+
+    const note = getTransposedNote(noteNumber, octave);
+
+    return { note };
   };
 
   const createInterval = tonic => {
     const direction = !!randomNumber(1) ? 1 : -1;
-    const octave = randomNumber(2) * direction;
-    let number = randomNumber(7); // 8 possible intervals to go from one octave to another
-    const note = transposedNote(intervalNote(number, tonic.note), octave);
-    number = intervalNumberAdjustments(note, tonic, octave, number);
+    const octave = randomNumber(1) * direction;
+    const numberWithoutAdjustments = randomNumber(7); // 8 possible intervals to go from one octave to another
+    const noteWithoutTranspose = getIntervalNote(numberWithoutAdjustments, tonic.note);
 
-    return { number, note, octave };
+    const note = getTransposedNote(noteWithoutTranspose, octave);
+    const number = getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, numberWithoutAdjustments);
+
+    return { note, number };
   };
 
   const tonic = createTonic();
@@ -79,21 +83,27 @@ function randomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max + 1));
 }
 
-function intervalNumberAdjustments(note, tonic, octave, number) {
-  const isSameButInAnotherOctave = (note - tonic.note) % 12 === 0;
+function getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, number) {
+  const haveNotesSameFrequency = note === tonic.note;
 
-  if (isSameButInAnotherOctave) {
-    const transDir = octave - tonic.octave;
-
-    if (transDir > 0) number = 7;
-    if (transDir < 0) number = 0;
+  if (haveNotesSameFrequency) {
+    return 0;
   }
 
-  if (note === tonic.note) {
-    number = 0;
+  const haveNotesDifferentPitch = (note - tonic.note) % 12 !== 0;
+
+  if (haveNotesDifferentPitch) {
+    return number;
   }
 
-  return number;
+  // Different frequencies but same pitch: Measure distance
+  const noteDistance = note - tonic.note;
+
+  // Octave forward
+  if (noteDistance > 0) return 7;
+
+  // Octave backwards or same
+  return 0;
 }
 
 export async function playIntervalQuestion(intervalQuestion, timePerNote = 750) {
