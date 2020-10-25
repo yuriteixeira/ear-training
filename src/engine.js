@@ -4,9 +4,7 @@
  * - https://calculla.com/calculators/table/note_frequencies
  */
 
-import { Synth } from './synth';
-
-let audio;
+import * as audio from './synth';
 
 export const NOTES = {
   A: 0,
@@ -45,10 +43,6 @@ export function getIntervalNote(interval, note, scale = SCALES.MAJOR) {
 
 export function getNoteInHertz(note) {
   return Number((Math.pow(2, note / 12) * 440).toFixed(2));
-}
-
-export function initEngine() {
-  audio = new Synth();
 }
 
 export function getGameProps(game) {

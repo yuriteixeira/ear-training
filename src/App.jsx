@@ -38,7 +38,6 @@ function App() {
   }
 
   async function start() {
-    initEngine();
     const newGame = resetGame();
     await addQuestion(newGame, setGameState);
   }

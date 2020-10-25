@@ -1,27 +1,27 @@
-export class Synth {
-  constructor() {
-    this.context = new (window.AudioContext || window.webkitAudioContext)();
-  }
+let context;
+let oscillator;
+let gainNode;
 
-  init() {
-    this.oscillator = this.context.createOscillator();
-    this.gainNode = this.context.createGain();
+context = new (window.AudioContext || window.webkitAudioContext)();
 
-    this.oscillator.connect(this.gainNode);
-    this.gainNode.connect(this.context.destination);
-  }
+function reset() {
+  oscillator = context.createOscillator();
+  gainNode = context.createGain();
 
-  play(value) {
-    this.init();
+  oscillator.connect(gainNode);
+  gainNode.connect(context.destination);
+}
 
-    this.oscillator.frequency.setValueAtTime(value, this.context.currentTime);
-    this.gainNode.gain.setValueAtTime(1, this.context.currentTime);
+export function play(value) {
+  reset();
 
-    this.oscillator.start();
-  }
+  oscillator.frequency.setValueAtTime(value, context.currentTime);
+  gainNode.gain.setValueAtTime(1, context.currentTime);
 
-  stop() {
-    this.gainNode.gain.setValueAtTime(0, this.context.currentTime);
-    this.oscillator.stop(this.context.currentTime + 1);
-  }
+  oscillator.start();
+}
+
+export function stop() {
+  gainNode.gain.setValueAtTime(0, context.currentTime);
+  oscillator.stop(context.currentTime);
 }
