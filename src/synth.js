@@ -6,6 +6,7 @@ context = new (window.AudioContext || window.webkitAudioContext)();
 
 function reset() {
   oscillator = context.createOscillator();
+  oscillator.type = "triangle";
   gainNode = context.createGain();
 
   oscillator.connect(gainNode);
