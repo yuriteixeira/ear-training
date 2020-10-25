@@ -7,7 +7,7 @@ export const QuestionsForm = ({ game, question, nextQuestion, answer, end }) => 
 
     <section className="choice">
       {game.scale.map((interval, idx) => (
-        <button value={idx} onClick={answer} disabled={!question.hasPlayed}>
+        <button key={interval.name} value={idx} onClick={answer} disabled={!question.hasPlayed}>
           {interval.name}
         </button>
       ))}

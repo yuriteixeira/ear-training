@@ -25,9 +25,17 @@
   justify-content: flex-start;
 }
 
-.app button {
+.app button,
+.app select,
+.app option {
   font-size: 2rem;
   flex-grow: 1;
+}
+
+.app .start button,
+.app .start select {
+  width: 90%;
+  margin-bottom: 0.5rem;
 }
 
 .app .question .other-actions {

@@ -1,5 +1,5 @@
 import { collectStats, createIntervalQuestion } from './game';
-import {SCALES} from "./music";
+import { SCALES } from './music';
 
 it('generates an interval question', () => {
   const result = createIntervalQuestion();

@@ -10,6 +10,7 @@ import { SCALES } from '../lib/music';
 let nextQuestionTimeout;
 
 function App() {
+  const [options, setOptions] = useState({});
   const [game, setGameState] = useState({});
   const [stats, setStatsState] = useState({});
   const gameProps = getGameProps(game);
@@ -19,7 +20,7 @@ function App() {
   function render() {
     return (
       <div className="app">
-        {!hasGameStarted && <StartHeader {...{ start }} />}
+        {!hasGameStarted && <StartHeader {...{ start, options, setOptions }} />}
 
         {hasGameStarted && !hasMadeChoice && <QuestionsForm {...{ game, question, nextQuestion, answer, end }} />}
 
@@ -32,7 +33,7 @@ function App() {
 
   function resetGame() {
     return {
-      scale: SCALES.MAJOR,
+      scale: SCALES[options.scale],
       start: Date.now(),
       questions: [],
       end: undefined,
@@ -41,6 +42,12 @@ function App() {
 
   async function start() {
     const newGame = resetGame();
+
+    if (!newGame.scale) {
+      alert('Choose a scale!');
+      return;
+    }
+
     await addQuestion(newGame, setGameState);
   }
 
