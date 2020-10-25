@@ -27,11 +27,11 @@ export const SCALES = {
   MAJOR: [2, 2, 1, 2, 2, 2, 1],
 };
 
-export function transposedNote(note, octaveFromCentral = 0) {
+export function getTransposedNote(note, octaveFromCentral = 0) {
   return note + octaveFromCentral * 12;
 }
 
-export function intervalNote(interval, note, scale = SCALES.MAJOR) {
+export function getIntervalNote(interval, note, scale = SCALES.MAJOR) {
   // 0 based index - interval ones is internally 0
   const target = interval - 1;
 
@@ -43,12 +43,43 @@ export function intervalNote(interval, note, scale = SCALES.MAJOR) {
   return note + intervalSum;
 }
 
-export function noteInHertz(note) {
+export function getNoteInHertz(note) {
   return Number((Math.pow(2, note / 12) * 440).toFixed(2));
 }
 
 export function initEngine() {
   audio = new Synth();
+}
+
+export function getGameProps(game) {
+  const hasGameStarted = !!game.start;
+  const hasGameEnded = !!game.end;
+
+  const questions = game.questions;
+  const question = questions && questions.length > 0 ? questions[0] : undefined;
+  const choice = question?.choice;
+  const hasMadeChoice = choice !== undefined;
+  const isChoiceCorrect = choice === question?.interval?.number;
+  return {
+    hasGameStarted,
+    hasGameEnded,
+    questions,
+    question,
+    hasMadeChoice,
+    isChoiceCorrect,
+  };
+}
+
+export async function addQuestion(game, setGameState) {
+  const newQuestion = createIntervalQuestion();
+  game.questions.unshift(newQuestion);
+  setGameState({ ...game });
+
+  await playIntervalQuestion(game.questions[0]);
+
+  game.questions[0].hasPlayed = true;
+  game.questions[0].start = Date.now();
+  setGameState({ ...game });
 }
 
 export function createIntervalQuestion() {
@@ -76,6 +107,7 @@ export function createIntervalQuestion() {
 
   const tonic = createTonic();
   const interval = createInterval(tonic);
+
   return { tonic, interval };
 }
 
@@ -113,7 +145,7 @@ export async function playIntervalQuestion(intervalQuestion, timePerNote = 750) 
 }
 
 async function playNote(note, time) {
-  audio.play(noteInHertz(note));
+  audio.play(getNoteInHertz(note));
 
   return new Promise(resolve => {
     setTimeout(() => {
@@ -124,7 +156,6 @@ async function playNote(note, time) {
 }
 
 // TODO: Tests on all new functions below
-
 
 export function collectStats(game) {
   const defaults = {
@@ -174,7 +205,7 @@ export function collectStats(game) {
 
   gameStats.avgHit = {
     time: gameStats.totalCorrect && gameStats.sumTimeToHit / gameStats.totalCorrect,
-    start: game.start
+    start: game.start,
   };
 
   localStorage.setItem('stats', JSON.stringify([...savedStats, gameStats]));
@@ -186,7 +217,6 @@ export function collectStats(game) {
 
 function aggregateRecords(stats) {
   return stats.reduce((acc, stat) => {
-    debugger;
     if (!acc.avgHit || stat.avgHit?.time < acc.avgHit?.time) acc.avgHit = stat.avgHit;
     if (!acc.fasterHit || stat.fasterHit?.time < acc.fasterHit?.time) acc.fasterHit = stat.fasterHit;
     if (!acc.slowerHit || stat.slowerHit?.time > acc.slowerHit?.time) acc.slowerHit = stat.slowerHit;
@@ -209,35 +239,4 @@ export function formatTime(ms) {
   if (!ms) return '???';
   const seconds = (ms / 1000).toFixed(2);
   return `${seconds}s`;
-}
-
-export function getGameProps(game) {
-  const hasGameStarted = !!game.start;
-  const hasGameEnded = !!game.end;
-
-  const questions = game.questions;
-  const question = questions && questions.length > 0 ? questions[0] : undefined;
-  const choice = question?.choice;
-  const hasMadeChoice = choice !== undefined;
-  const isChoiceCorrect = choice === question?.interval?.number;
-  return {
-    hasGameStarted,
-    hasGameEnded,
-    questions,
-    question,
-    hasMadeChoice,
-    isChoiceCorrect,
-  };
-}
-
-export async function addQuestion(game, setGameState) {
-  const newQuestion = createIntervalQuestion();
-  game.questions.unshift(newQuestion);
-  setGameState({ ...game });
-
-  await playIntervalQuestion(game.questions[0]);
-
-  game.questions[0].hasPlayed = true;
-  game.questions[0].start = Date.now();
-  setGameState({ ...game });
 }
