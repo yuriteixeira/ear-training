@@ -1,4 +1,4 @@
-import { formatTime } from './engine';
+import { formatTime } from '../lib/game';
 import React from 'react';
 
 export const EndFeedbackWithStats = ({ stats }) => (

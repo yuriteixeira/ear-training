@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { addQuestion, collectStats, getGameProps, initEngine } from './engine.js';
+import { addQuestion, collectStats, getGameProps } from '../lib/game.js';
 import { StartHeader } from './StartHeader';
 import { QuestionsForm } from './QuestionsForm';
 import { ChoiceFeedback } from './ChoiceFeedback';

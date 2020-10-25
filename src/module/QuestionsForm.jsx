@@ -1,4 +1,4 @@
-import { playIntervalQuestion } from './engine';
+import { playIntervalQuestion } from '../lib/game';
 import React from 'react';
 
 export const QuestionsForm = ({ answer, question, nextQuestion, end }) => (
