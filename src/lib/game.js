@@ -15,7 +15,7 @@ export function getGameProps(game) {
   const question = questions && questions.length > 0 ? questions[0] : undefined;
   const choice = question?.choice;
   const hasMadeChoice = choice !== undefined;
-  const isChoiceCorrect = choice && question && choice === question?.interval?.index;
+  const isChoiceCorrect = question && choice === question?.interval?.index;
   const chosenInterval = game.scale && choice && game.scale[choice];
   const correctInterval = game.scale && game.scale[question?.interval?.index];
 
