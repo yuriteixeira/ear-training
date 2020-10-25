@@ -5,6 +5,7 @@ import { StartHeader } from './StartHeader';
 import { QuestionsForm } from './QuestionsForm';
 import { ChoiceFeedback } from './ChoiceFeedback';
 import { EndFeedbackWithStats } from './EndFeedbackWithStats';
+import { SCALES } from '../lib/music';
 
 let nextQuestionTimeout;
 
@@ -13,16 +14,16 @@ function App() {
   const [stats, setStatsState] = useState({});
   const gameProps = getGameProps(game);
 
-  const { hasGameStarted, hasGameEnded, question, hasMadeChoice, isChoiceCorrect } = gameProps;
+  const { hasGameStarted, hasGameEnded, question, hasMadeChoice, isChoiceCorrect, chosenInterval, correctInterval } = gameProps;
 
   function render() {
     return (
       <div className="app">
         {!hasGameStarted && <StartHeader {...{ start }} />}
 
-        {hasGameStarted && !hasMadeChoice && <QuestionsForm {...{ answer, question, nextQuestion, end }} />}
+        {hasGameStarted && !hasMadeChoice && <QuestionsForm {...{ game, question, nextQuestion, answer, end }} />}
 
-        {hasGameStarted && hasMadeChoice && <ChoiceFeedback {...{ isChoiceCorrect, question, nextQuestion, end }} />}
+        {hasGameStarted && hasMadeChoice && <ChoiceFeedback {...{ isChoiceCorrect, chosenInterval, correctInterval, nextQuestion, end }} />}
 
         {hasGameEnded && <EndFeedbackWithStats {...{ stats }} />}
       </div>
@@ -31,6 +32,7 @@ function App() {
 
   function resetGame() {
     return {
+      scale: SCALES.MAJOR,
       start: Date.now(),
       questions: [],
       end: undefined,

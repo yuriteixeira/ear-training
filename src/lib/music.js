@@ -14,7 +14,16 @@ export const NOTES = {
 };
 
 export const SCALES = {
-  MAJOR: [2, 2, 1, 2, 2, 2, 1],
+  MAJOR: [
+    {name: '1', steps: 0},
+    {name: '2', steps: 2},
+    {name: '3', steps: 2},
+    {name: '4', steps: 1},
+    {name: '5', steps: 2},
+    {name: '6', steps: 2},
+    {name: '7', steps: 2},
+    {name: '8', steps: 1},
+  ],
 };
 
 export function getNoteInHertz(note) {
@@ -25,14 +34,11 @@ export function getTransposedNote(note, octaveFromCentral = 0) {
   return note + octaveFromCentral * 12;
 }
 
-export function getIntervalNote(interval, note, scale = SCALES.MAJOR) {
-  // 0 based index - interval ones is internally 0
-  const target = interval - 1;
-
+export function getIntervalNote(intervalIndex, note, scale = SCALES.MAJOR) {
   // since 0 is the 1st interval, it means it's the same note
-  if (target < 0) return note;
+  if (intervalIndex === 0) return note;
 
   // find the note given an interval, based in how many steps/jumps are necessary
-  const intervalSum = scale.reduce((sum, jumps, idx) => (idx > target ? sum : sum + jumps), 0);
+  const intervalSum = scale.reduce((sum, interval, idx) => (idx > intervalIndex ? sum : sum + interval.steps), 0);
   return note + intervalSum;
 }

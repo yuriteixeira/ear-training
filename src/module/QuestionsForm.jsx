@@ -1,35 +1,16 @@
 import { playIntervalQuestion } from '../lib/game';
 import React from 'react';
 
-export const QuestionsForm = ({ answer, question, nextQuestion, end }) => (
+export const QuestionsForm = ({ game, question, nextQuestion, answer, end }) => (
   <section className="question">
     <header>What is the interval?</header>
 
     <section className="choice">
-      <button value={0} onClick={answer} disabled={!question.hasPlayed}>
-        1
-      </button>
-      <button value={1} onClick={answer} disabled={!question.hasPlayed}>
-        2
-      </button>
-      <button value={2} onClick={answer} disabled={!question.hasPlayed}>
-        3
-      </button>
-      <button value={3} onClick={answer} disabled={!question.hasPlayed}>
-        4
-      </button>
-      <button value={4} onClick={answer} disabled={!question.hasPlayed}>
-        5
-      </button>
-      <button value={5} onClick={answer} disabled={!question.hasPlayed}>
-        6
-      </button>
-      <button value={6} onClick={answer} disabled={!question.hasPlayed}>
-        7
-      </button>
-      <button value={7} onClick={answer} disabled={!question.hasPlayed}>
-        8
-      </button>
+      {game.scale.map((interval, idx) => (
+        <button value={idx} onClick={answer} disabled={!question.hasPlayed}>
+          {interval.name}
+        </button>
+      ))}
     </section>
 
     <section className="other-actions">

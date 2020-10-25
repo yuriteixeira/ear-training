@@ -1,12 +1,12 @@
 import React from 'react';
 
-export const ChoiceFeedback = ({ isChoiceCorrect, question, nextQuestion, end }) => (
+export const ChoiceFeedback = ({ isChoiceCorrect, chosenInterval, correctInterval, nextQuestion, end }) => (
   <section className="choice-feedback">
     <p>{isChoiceCorrect ? 'CORRECT! 🎉' : 'Incorrect... 😨'}</p>
 
     {!isChoiceCorrect && (
       <p>
-        You chose {question.choice + 1} but the write interval is <strong>{question.interval.number + 1}</strong>
+        You chose {chosenInterval?.name} but the right interval is <strong>{correctInterval?.name}</strong>
       </p>
     )}
 

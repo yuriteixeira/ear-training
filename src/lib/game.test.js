@@ -1,4 +1,5 @@
 import { collectStats, createIntervalQuestion } from './game';
+import {SCALES} from "./music";
 
 it('generates an interval question', () => {
   const result = createIntervalQuestion();
@@ -6,7 +7,7 @@ it('generates an interval question', () => {
   expect(result).toHaveProperty('tonic');
   expect(result).toHaveProperty('interval');
   expect(result.tonic).toHaveProperty('note');
-  expect(result.interval).toHaveProperty('number');
+  expect(result.interval).toHaveProperty('index');
   expect(result.interval).toHaveProperty('note');
 });
 
@@ -16,25 +17,26 @@ it('aggregates stats', () => {
   const rightQuestion = {
     start: time + 1000,
     end: time + 2000,
-    interval: { number: 0 },
+    interval: { index: 0 },
     choice: 0,
   };
 
   const wrongQuestion = {
     start: time + 3000,
     end: time + 5000,
-    interval: { number: 7 },
+    interval: { index: 7 },
     choice: 0,
   };
 
   const rightButSlowQuestion = {
     start: time + 6000,
     end: time + 10000,
-    interval: { number: 0 },
+    interval: { index: 0 },
     choice: 0,
   };
 
   const game = {
+    scale: SCALES.MAJOR,
     start: time,
     end: time + 10000,
     questions: [rightQuestion, wrongQuestion, rightButSlowQuestion],

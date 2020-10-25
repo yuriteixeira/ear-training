@@ -4,7 +4,7 @@
  * - https://calculla.com/calculators/table/note_frequencies
  */
 
-import { getIntervalNote, getTransposedNote } from './music';
+import { getIntervalNote, getTransposedNote, SCALES } from './music';
 import { playNote } from './synth';
 
 export function getGameProps(game) {
@@ -15,7 +15,10 @@ export function getGameProps(game) {
   const question = questions && questions.length > 0 ? questions[0] : undefined;
   const choice = question?.choice;
   const hasMadeChoice = choice !== undefined;
-  const isChoiceCorrect = choice === question?.interval?.number;
+  const isChoiceCorrect = choice && question && choice === question?.interval?.index;
+  const chosenInterval = game.scale && choice && game.scale[choice];
+  const correctInterval = game.scale && game.scale[question?.interval?.index];
+
   return {
     hasGameStarted,
     hasGameEnded,
@@ -23,11 +26,13 @@ export function getGameProps(game) {
     question,
     hasMadeChoice,
     isChoiceCorrect,
+    correctInterval,
+    chosenInterval,
   };
 }
 
 export async function addQuestion(game, setGameState) {
-  const newQuestion = createIntervalQuestion();
+  const newQuestion = createIntervalQuestion(game.scale);
   game.questions.unshift(newQuestion);
   setGameState({ ...game });
 
@@ -38,7 +43,7 @@ export async function addQuestion(game, setGameState) {
   setGameState({ ...game });
 }
 
-export function createIntervalQuestion() {
+export function createIntervalQuestion(scale = SCALES.MAJOR) {
   const createTonic = () => {
     const direction = !!randomNumber(1) ? 1 : -1;
     const octave = randomNumber(2) * direction;
@@ -52,13 +57,13 @@ export function createIntervalQuestion() {
   const createInterval = tonic => {
     const direction = !!randomNumber(1) ? 1 : -1;
     const octave = randomNumber(1) * direction;
-    const numberWithoutAdjustments = randomNumber(7); // 8 possible intervals to go from one octave to another
-    const noteWithoutTranspose = getIntervalNote(numberWithoutAdjustments, tonic.note);
+    const indexBeforeAdjustments = randomNumber(scale.length - 1);
+    const noteWithoutTranspose = getIntervalNote(indexBeforeAdjustments, tonic.note, scale);
 
     const note = getTransposedNote(noteWithoutTranspose, octave);
-    const number = getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, numberWithoutAdjustments);
+    const index = getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, indexBeforeAdjustments, scale);
 
-    return { note, number };
+    return { note, index };
   };
 
   const tonic = createTonic();
@@ -71,7 +76,7 @@ function randomNumber(max) {
   return Math.floor(Math.random() * Math.floor(max + 1));
 }
 
-function getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, number) {
+function getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, intervalIndex, scale) {
   const haveNotesSameFrequency = note === tonic.note;
 
   if (haveNotesSameFrequency) {
@@ -81,14 +86,14 @@ function getFrequencyAndPitchAdjustedIntervalNumber(tonic, note, number) {
   const haveNotesDifferentPitch = (note - tonic.note) % 12 !== 0;
 
   if (haveNotesDifferentPitch) {
-    return number;
+    return intervalIndex;
   }
 
   // Different frequencies but same pitch: Measure distance
   const noteDistance = note - tonic.note;
 
   // Octave forward
-  if (noteDistance > 0) return 7;
+  if (noteDistance > 0) return scale.length - 1;
 
   // Octave backwards or same
   return 0;
@@ -129,7 +134,7 @@ export function collectStats(game) {
   const gameStats = questions.reduce((acc, question) => {
     acc.totalQuestions++;
 
-    if (question.choice !== question.interval.number) {
+    if (question.choice !== question.interval.index) {
       acc.totalIncorrect++;
       return acc;
     }
