@@ -18,11 +18,16 @@
 .app header {
   margin-bottom: 2rem;
 }
+
 .app .question .choice {
   margin: 0 2rem;
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+}
+
+.app .question .choice :last-child {
+  flex-grow: 10;
 }
 
 .app button,
