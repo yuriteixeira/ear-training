@@ -1,7 +1,4 @@
-jest.mock('./synth');
-
 import { collectStats, createIntervalQuestion } from './game';
-import { getIntervalNote, getTransposedNote } from './music';
 
 it('generates an interval question', () => {
   const result = createIntervalQuestion();
@@ -11,7 +8,6 @@ it('generates an interval question', () => {
   expect(result.tonic).toHaveProperty('note');
   expect(result.interval).toHaveProperty('number');
   expect(result.interval).toHaveProperty('note');
-  expect(result.interval.note).toBe(getTransposedNote(getIntervalNote(result.interval.number, result.tonic.note), result.interval.octave));
 });
 
 it('aggregates stats', () => {
